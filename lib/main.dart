@@ -269,7 +269,21 @@ class ProfileScreen extends StatelessWidget {
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [Text("User Email: ${user.email ?? 'No Email'}")],
+            children: [
+              Text("User Email: ${user.email ?? 'No Email'}"),
+              ElevatedButton(
+                onPressed: () async {
+                  await FirebaseAuth.instance.signOut();
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MyHomePage(title: 'homepage'),
+                    ),
+                  );
+                },
+                child: Text("Logout"),
+              ),
+            ],
           ),
         ),
       );

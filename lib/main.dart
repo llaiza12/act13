@@ -221,9 +221,17 @@ class _EmailPasswordFormState extends State<EmailPasswordForm> {
             padding: const EdgeInsets.symmetric(vertical: 16.0),
             alignment: Alignment.center,
             child: ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 if (_formKey.currentState!.validate()) {
                   _signInWithEmailAndPassword();
+                  if (_success) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ProfileScreen(),
+                      ),
+                    );
+                  }
                 }
               },
               child: Text('Submit'),
@@ -244,5 +252,27 @@ class _EmailPasswordFormState extends State<EmailPasswordForm> {
         ],
       ),
     );
+  }
+}
+
+class ProfileScreen extends StatelessWidget {
+  const ProfileScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final User? user = FirebaseAuth.instance.currentUser;
+
+    if (user == null) {
+      return Scaffold(body: Center(child: Text("User Email: No Email")));
+    } else {
+      return Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [Text("User Email: ${user.email ?? 'No Email'}")],
+          ),
+        ),
+      );
+    }
   }
 }
